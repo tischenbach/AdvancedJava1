@@ -14,9 +14,11 @@ public class AdvancedJava1 {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        System.out.println("");
-    }
-    
+
+  public static void main(String[] args) {
+
+    System.out.println("Le nom du thread principal est " + Thread.currentThread().getName());
+    Fenetre fen = new Fenetre();
+  }
+  
 }
