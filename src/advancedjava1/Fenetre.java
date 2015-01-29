@@ -7,10 +7,12 @@ package advancedjava1;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 /**
  *
@@ -42,17 +44,31 @@ public class Fenetre extends JFrame implements ActionListener {
     }
     
     public void actionPerformed(ActionEvent arg0) {
-        
-    System.out.print("Bonjour\n");
-    String route = "";
+    
+    BufferedReader in = null;
     Process traceRt = null;
-        try {
-            traceRt = Runtime.getRuntime().exec("tracert google.fr");
-        } catch (IOException ex) {
-            Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
+    String line = "";
+    StringBuffer output = new StringBuffer();
+        
+    try 
+    {
+        traceRt = Runtime.getRuntime().exec("tracert google.fr");
+        in = new BufferedReader(new InputStreamReader(traceRt.getInputStream()));
+
+        while ((line = in.readLine())!= null)
+        {
+        output.append(line + "\n");
         }
+        
+        System.out.print(output.toString());
+
+    }
+    
+    catch (IOException ex) 
+    {
+        Logger.getLogger(Fenetre.class.getName()).log(Level.SEVERE, null, ex);
+    }
    
-        System.out.print(traceRt.getInputStream());
-    }  
+    }
     
 }
