@@ -69,19 +69,30 @@ public String[] extractIP(String[] chaines){
     {   
         if (chaines[i].compareTo("")!=0)
         {
-            if(chaines[i].charAt(chaines[i].length() - 2) == ']')
+            if (chaines[i].charAt(chaines[i].length() - 1) == '.')
+            {
+                buffer[k] = "";
+            }
+            
+           else
+           {
+
+                if(chaines[i].charAt(chaines[i].length() - 2) == ']')
+                    {
+                        j++;
+                    }
+
+                while(chaines[i].charAt(chaines[i].length() - j) != ' ' && chaines[i].charAt(chaines[i].length() - j) != '[')
                 {
+                    buffer[k]+= chaines[i].charAt(chaines[i].length() - j);
                     j++;
                 }
 
-            while(chaines[i].charAt(chaines[i].length() - j) != ' ' && chaines[i].charAt(chaines[i].length() - j) != '[')
-            {
-                buffer[k]+= chaines[i].charAt(chaines[i].length() - j);
-                j++;
             }
-
+            
             k++;
             j=2;
+            
         }
     }
     
