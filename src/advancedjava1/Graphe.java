@@ -21,7 +21,7 @@ public class Graphe {
         for (int i=0; i<IPStrings.length; i++)
         {
             if (graph.getNode(IPStrings[i])== null)
-            graph.addNode(IPStrings[i]);
+            graph.addNode(IPStrings[i]).addAttribute("ui.label", IPStrings[i]);;
         }
         
         for (int i=1; i<IPStrings.length; i++)
