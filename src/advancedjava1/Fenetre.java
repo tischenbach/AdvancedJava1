@@ -45,13 +45,18 @@ public class Fenetre extends JFrame implements ActionListener {
     
     public void actionPerformed(ActionEvent arg0) {
     
+    // Déclairation des ressources
     BufferedReader in = null;
     Process traceRt = null;
     String line = "";
+    String[]buffer1, buffer2, buffer3;
+    
     StringBuffer output = new StringBuffer();
+    Parse parseClass = new Parse();
         
     try 
     {
+        // Exécution de la commande tracert
         traceRt = Runtime.getRuntime().exec("tracert google.fr");
         in = new BufferedReader(new InputStreamReader(traceRt.getInputStream()));
 
@@ -60,8 +65,66 @@ public class Fenetre extends JFrame implements ActionListener {
         output.append(line + "\n");
         }
         
-        System.out.print(output.toString());
-
+        //System.out.print(output.toString());
+        //System.out.println("Test1");
+        
+        //Récupération d'un tableau de chaine de caractères contenant ligne par ligne le résultat du tracert
+        buffer1 = parseClass.Convert(output.toString());
+        // buffer = parseClass.Convert("Bonjour\nDebile\nBoum\nSalut");
+        
+        // Affichage du tableau
+        /*for (int i = 0; i<buffer1.length; i++){
+            
+            System.out.println(buffer1[i]);
+        }*/
+        
+        //System.out.println("Test2"); 
+        
+        // Extraction des adresse IP dans un tableau
+        buffer2 = parseClass.extractIP(buffer1);
+        
+         // Affichage du nouveau tableau contenant les adresses IP (non retournées dans le bon sens)
+        /*for (int i =0; i<buffer2.length; i++)
+        {
+            if (buffer2[i]!=null)
+            {
+                System.out.println(buffer2[i]);
+            }
+        }*/
+        
+        // Allocation d'un tableau de même taille que le tableau contenant les adresses IP
+        buffer3 = new String[buffer2.length];
+        
+        // Initialisation du tableau qui contiendra les adresses IP
+        for (int i = 0; i<buffer3.length; i++)
+        {
+           buffer3[i]="";
+        }
+        
+        // On effectue une rotation des chaines de caractères contenant les adresses IP
+        for (int i =0; i<buffer2.length; i++)
+        {
+            if (buffer2[i]!=null) 
+            {  
+                for (int j=buffer2[i].length()-1; j>=0; j--)
+                {
+                    buffer3[i]+=buffer2[i].charAt(j);
+                } 
+            }
+  
+        }
+         
+        // Affichage du nouveau tableau contenant les adresses IP (retournées)
+        for (int i =0; i<buffer3.length; i++)
+        {
+            if (buffer3[i]!=null)
+            {
+                System.out.println(buffer3[i]);
+            }
+        }
+        
+        //System.out.println("Test3");
+        
     }
     
     catch (IOException ex) 
