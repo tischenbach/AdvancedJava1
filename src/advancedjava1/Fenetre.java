@@ -25,17 +25,56 @@ public class Fenetre extends JFrame implements ActionListener {
     
     private JPanel pan = new JPanel();
     private JLabel ipAdress = new JLabel("Saisir une adresse IP");
-    private JTextField jtf = new JTextField("Ex : 192.168.0.1");
+    private JTextField jtf = new JTextField("");
     private JButton traceroute = new JButton("Traceroute");
     private JButton generate = new JButton("Générer une adresse IP");
+    private JOptionPane jop1 = new JOptionPane();
+    private JOptionPane jop2 = new JOptionPane();
+    private JMenuBar menuBar = new JMenuBar();
+    private JMenu test1 = new JMenu("Options");
+    private JMenu item1 = new JMenu("Nombre de sauts");
     private Graphe graph = new Graphe();
+    private JMenuItem[] JMenuItemSauts = new JMenuItem[30];
+    private String Commande="";
     
     public Fenetre(){
         
     this.setTitle("Traceroute");    
     this.setSize(600, 600);
     this.setLocationRelativeTo(null);
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);              
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    
+    this.jtf.setPreferredSize(new Dimension(150, 30));
+    
+    this.test1.add(this.item1);   
+     
+    for (int i = 0; i<30; i++)
+    {
+        JMenuItemSauts[i] = new JMenuItem(i+1 + " Saut(s)");
+        this.item1.add(this.JMenuItemSauts[i]);
+    }
+    
+    for (int i = 0; i<30; i++)
+    {
+        JMenuItemSauts[i].addActionListener(new ActionListener(){
+        public void actionPerformed(ActionEvent arg0)
+        {
+            for (int j = 0; j<30; j++)
+            {
+                if(arg0.getSource() == JMenuItemSauts[j])
+                {
+                    j++;
+                    Commande = "-h "+ j + " ";
+                    jop2.showMessageDialog(null, "Vous avez choisi d'effectuer le traceroute avec " + j + " sauts !", "Nombre de sauts choisi", JOptionPane.INFORMATION_MESSAGE);
+                    j = 30;
+                }
+            }
+                
+        }        
+        });
+    }
+     
+    this.menuBar.add(this.test1);
+    this.setJMenuBar(menuBar);
     
     JPanel panel = new JPanel();
     panel.add(ipAdress);
@@ -46,15 +85,18 @@ public class Fenetre extends JFrame implements ActionListener {
     
     traceroute.addActionListener(this);
     generate.addActionListener(this);
+    
     this.setContentPane(pan);
+ 
     this.setVisible(true);
+    
     }
     
     public void actionPerformed(ActionEvent arg0) 
     {
         if (arg0.getSource() == traceroute)
         {
-            if (jtf.getText()!=null && jtf.getText().contains(" ")!=true)
+            if (jtf.getText().isEmpty()!=true && jtf.getText().contains(" ")!=true)
             {
                 // Déclaration des ressources
                 BufferedReader in = null;
@@ -69,7 +111,7 @@ public class Fenetre extends JFrame implements ActionListener {
                 try 
                 {
                     // Exécution de la commande tracert
-                    traceRt = Runtime.getRuntime().exec("tracert " + jtf.getText());
+                    traceRt = Runtime.getRuntime().exec("tracert " + Commande + jtf.getText());
                     in = new BufferedReader(new InputStreamReader(traceRt.getInputStream()));
 
                     while ((line = in.readLine())!= null)
@@ -172,20 +214,27 @@ public class Fenetre extends JFrame implements ActionListener {
 
             }
             
-            if (arg0.getSource() == generate)
-            {   /*
-                // Déclaration des ressources
-                String IpRandom;
-                IpRandom="nul";
-                Random r = new Random();
-                int IpAddress;
-                
-                for(int i=0; i<4; i++)
-                {
-                    IpAddress = r.nextInt(255); 
-                }*/
+            else if (jtf.getText().isEmpty()==true || jtf.getText().contains(" ") == true)
+            {
+                jop1.showMessageDialog(null, "L'adresse IP saisie n'est pas conforme\nEssayez une adresse IP au format suivant : 255.255.255.255", "Attention", JOptionPane.INFORMATION_MESSAGE);
             }
+              
         }
+                  
+        else if (arg0.getSource() == generate)
+        {   /*
+            // Déclaration des ressources
+            String IpRandom;
+            IpRandom="nul";
+            Random r = new Random();
+            int IpAddress;
+
+            for(int i=0; i<4; i++)
+            {
+                IpAddress = r.nextInt(255); 
+            }*/
+        }      
     }
+
     
 }
