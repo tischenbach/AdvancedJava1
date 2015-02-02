@@ -19,18 +19,10 @@ public class AdvancedJava1 {
 
     /**
      * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        try {
-            Process process =Runtime.getRuntime().exec("tracert yahoo.com");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            int data=0;
-            while((data=reader.read())>0){
-                System.out.print((char)data);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(AdvancedJava1.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+     */   
+
+  public static void main(String[] args) {
+    Fenetre fen = new Fenetre();
+  }
+  
 }
