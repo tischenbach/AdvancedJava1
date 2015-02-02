@@ -103,81 +103,92 @@ public class Fenetre extends JFrame implements ActionListener {
                 BufferedReader in = null;
                 Process traceRt = null;
                 String line = "";
-                String[]buffer1, buffer2, buffer3, buffer4;
+                String[]buffer1, buffer2, buffer3, buffer4 = null;
                 int compteurStringVide=0;
 
                 StringBuffer output = new StringBuffer();
                 Parse parseClass = new Parse();
-
+                
+                    
+                
                 try 
                 {
-                    // Exécution de la commande tracert
-                    traceRt = Runtime.getRuntime().exec("tracert " + Commande + jtf.getText());
-                    in = new BufferedReader(new InputStreamReader(traceRt.getInputStream()));
+                    if (System.getProperty("os.name").indexOf("Windows") != -1){
+                        // Exécution de la commande tracert
+                        traceRt = Runtime.getRuntime().exec("tracert " + Commande + jtf.getText());
+                        in = new BufferedReader(new InputStreamReader(traceRt.getInputStream()));
 
-                    while ((line = in.readLine())!= null)
-                    {
-                    output.append(line + "\n");
-                    }
+                        while ((line = in.readLine())!= null)
+                        {
+                        output.append(line + "\n");
+                        }
 
-                    //Récupération d'un tableau de chaine de caractères contenant ligne par ligne le résultat du tracert
-                    buffer1 = parseClass.Convert(output.toString());
+                        //Récupération d'un tableau de chaine de caractères contenant ligne par ligne le résultat du tracert
+                        buffer1 = parseClass.Convert(output.toString());
 
-                    // Extraction des adresse IP dans un tableau
-                    buffer2 = parseClass.extractIP(buffer1);
+                        // Extraction des adresse IP dans un tableau
+                        buffer2 = parseClass.extractIP(buffer1);
 
-                    // Allocation d'un tableau de même taille que le tableau contenant les adresses IP
-                    buffer3 = new String[buffer2.length];
+                        // Allocation d'un tableau de même taille que le tableau contenant les adresses IP
+                        buffer3 = new String[buffer2.length];
 
-                    // Initialisation du tableau qui contiendra les adresses IP
-                    for (int i = 0; i<buffer3.length; i++)
-                    {
-                       buffer3[i]="";
-                    }
+                        // Initialisation du tableau qui contiendra les adresses IP
+                        for (int i = 0; i<buffer3.length; i++)
+                        {
+                           buffer3[i]="";
+                        }
 
-                    // On effectue une rotation des chaines de caractères contenant les adresses IP
-                    for (int i =0; i<buffer2.length; i++)
-                    {
-                        if (buffer2[i].compareTo("")!= 0) 
-                        {  
-                            for (int j=buffer2[i].length()-1; j>=0; j--)
+                        // On effectue une rotation des chaines de caractères contenant les adresses IP
+                        for (int i =0; i<buffer2.length; i++)
+                        {
+                            if (buffer2[i].compareTo("")!= 0) 
+                            {  
+                                for (int j=buffer2[i].length()-1; j>=0; j--)
+                                {
+                                    buffer3[i]+=buffer2[i].charAt(j);
+                                } 
+                            }                  
+                            else
                             {
-                                buffer3[i]+=buffer2[i].charAt(j);
-                            } 
-                        }                  
-                        else
+                                buffer3[i]="";
+                            }
+                        }
+
+                        // Affichage du nouveau tableau contenant les adresses IP (retournées)
+                        for (int i =0; i<buffer3.length; i++)
+                        {   
+                            if (buffer3[i].compareTo("")!= 0)
+                            {
+                                System.out.println(buffer3[i]);
+                            }
+                            else
+                            {
+                                compteurStringVide++;
+                            }                                
+                        }
+
+                        // Allocation du tableau contenant les adresses IP sans chaine vide
+                        buffer4= new String[buffer3.length-compteurStringVide];
+
+                        // Remplissage du tableau d'IP sans chaines vides
+                        int j=0;
+                        for (int i =0; i<buffer3.length; i++)
                         {
-                            buffer3[i]="";
+                            if (buffer3[i].compareTo("") != 0)
+                            {
+                                buffer4[j] = buffer3[i];
+                                j++;
+                            }
                         }
                     }
-
-                    // Affichage du nouveau tableau contenant les adresses IP (retournées)
-                    for (int i =0; i<buffer3.length; i++)
-                    {   
-                        if (buffer3[i].compareTo("")!= 0)
-                        {
-                            System.out.println(buffer3[i]);
-                        }
-                        else
-                        {
-                            compteurStringVide++;
-                        }                                
+                    else{
+                        traceRt = Runtime.getRuntime().exec("traceroute " + Commande + jtf.getText());
+                        in = new BufferedReader(new InputStreamReader(traceRt.getInputStream()));
+                        buffer4=parseClass.unixParse(in);
                     }
-
-                    // Allocation du tableau contenant les adresses IP sans chaine vide
-                    buffer4= new String[buffer3.length-compteurStringVide];
-
-                    // Remplissage du tableau d'IP sans chaines vides
-                    int j=0;
-                    for (int i =0; i<buffer3.length; i++)
-                    {
-                        if (buffer3[i].compareTo("") != 0)
-                        {
-                            buffer4[j] = buffer3[i];
-                            j++;
-                        }
-                    }
-
+                    
+                    
+                    
                     // Construction du graphe avec le tableau d'IP
                                       
                     for (int i=0; i<buffer4.length; i++)

@@ -5,15 +5,21 @@
  */
 package advancedjava1;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Nathanaël
  */
 public class Parse {
     
-    
+
 public Parse(){
-    
+
 }
 
 public String[] Convert(String ChaineAParser){
@@ -99,5 +105,28 @@ public String[] extractIP(String[] chaines){
     return buffer;
     
 }
+
+public String[] unixParse(BufferedReader buf)
+        {
+                String[] result = null;
+                String address;
+                String line = "";
+                int i=1, j=0; 
+                
+                try {
+                    while((line = buf.readLine()) != null)
+                    {
+                        if(i==0){
+                            //hostname = line.split("\\s+")[1];
+                            address = line.split("\\s+")[2].replaceAll("\\(|\\)", "");
+                            result[j]=address;
+                        }
+                        i--;
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(Parse.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return result;
+        }
     
 }
