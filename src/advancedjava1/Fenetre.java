@@ -40,7 +40,7 @@ public class Fenetre extends JFrame implements ActionListener {
     public Fenetre(){
         
     this.setTitle("Traceroute");    
-    this.setSize(600, 600);
+    this.setSize(800, 800);
     this.setLocationRelativeTo(null);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    
     this.jtf.setPreferredSize(new Dimension(150, 30));
