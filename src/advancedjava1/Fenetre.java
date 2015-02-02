@@ -96,6 +96,7 @@ public class Fenetre extends JFrame implements ActionListener {
     {
         if (arg0.getSource() == traceroute)
         {
+
             if (jtf.getText().isEmpty()!=true && jtf.getText().contains(" ")!=true)
             {
                 // Déclaration des ressources
@@ -219,21 +220,20 @@ public class Fenetre extends JFrame implements ActionListener {
                 jop1.showMessageDialog(null, "L'adresse IP saisie n'est pas conforme\nEssayez une adresse IP au format suivant : 255.255.255.255", "Attention", JOptionPane.INFORMATION_MESSAGE);
             }
               
-        }
-                  
-        else if (arg0.getSource() == generate)
-        {   /*
-            // Déclaration des ressources
-            String IpRandom;
-            IpRandom="nul";
-            Random r = new Random();
-            int IpAddress;
+        }     
 
-            for(int i=0; i<4; i++)
-            {
-                IpAddress = r.nextInt(255); 
-            }*/
-        }      
+
+        if (arg0.getSource() == generate)
+            {  
+                System.out.println("coucouc");
+                // Déclaration des ressources
+                Random r = new Random();
+                String IpAddress;
+                IpAddress = r.nextInt(256) + "." + r.nextInt(256) + "." + r.nextInt(256) + "." + r.nextInt(256); 
+                jtf.setText(IpAddress);
+                
+            }
+
     }
 
     
