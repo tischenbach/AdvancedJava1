@@ -109,9 +109,12 @@ public String[] extractIP(String[] chaines){
 public String[] unixParse(BufferedReader buf)
         {
                 String[] result = null;
+                String[] buffer;
                 String address;
                 String line = "";
                 int i=1, j=0; 
+                
+                buffer = new String[50];
                 
                 try {
                     while((line = buf.readLine()) != null)
@@ -119,13 +122,29 @@ public String[] unixParse(BufferedReader buf)
                         if(i==0){
                             //hostname = line.split("\\s+")[1];
                             address = line.split("\\s+")[2].replaceAll("\\(|\\)", "");
-                            result[j]=address;
+                            if(!address.equals("*"))
+                            {
+                                buffer[j]=address;
+                                j++;
+                            } 
                         }
-                        i--;
+                        else
+                        {
+                            i--;
+                        }
                     }
                 } catch (IOException ex) {
                     Logger.getLogger(Parse.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+                result = new String[j];
+                
+                for (i = 0; i<j ; i++)
+                {
+                    result[i]=buffer[i];
+                    //System.out.println(result[i]);
+                }
+                
                 return result;
         }
     

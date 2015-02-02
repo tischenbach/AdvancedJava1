@@ -182,7 +182,7 @@ public class Fenetre extends JFrame implements ActionListener {
                         }
                     }
                     else{
-                        traceRt = Runtime.getRuntime().exec("traceroute " + Commande + jtf.getText());
+                        traceRt = Runtime.getRuntime().exec("traceroute "+ jtf.getText());
                         in = new BufferedReader(new InputStreamReader(traceRt.getInputStream()));
                         buffer4=parseClass.unixParse(in);
                     }
